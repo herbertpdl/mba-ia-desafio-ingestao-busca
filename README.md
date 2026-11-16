@@ -137,10 +137,3 @@ O `docker-compose.yml` original tinha um bug no serviço `bootstrap_vector_ext`:
 | Quantos clientes temos em 2024? | Não tenho informações necessárias para responder sua pergunta. |
 | Você acha isso bom ou ruim? | Não tenho informações necessárias para responder sua pergunta. |
 | Qual o faturamento da Zeta Robótica S.A.? (empresa que não existe no PDF) | Não tenho informações necessárias para responder sua pergunta. |
-
-## Problemas comuns
-
-- **`Bind for 127.0.0.1:5432 failed: port is already allocated`:** outro Postgres já está usando a porta 5432. Pare esse container ou serviço e rode `docker compose up -d --force-recreate`. Outra opção é trocar a porta do host no `docker-compose.yml` (por exemplo, `"5433:5432"`) e ajustar o `DATABASE_URL`.
-- **Troca do modelo de embeddings:** a dimensão dos vetores é definida na primeira ingestão. Se você trocar de modelo, apague o banco com `docker compose down -v` e rode `docker compose up -d` e `python src/ingest.py` de novo.
-- **`401 expired_secret_key` ou `invalid_api_key`:** a `OPENAI_API_KEY` está expirada ou errada. Gere uma nova chave e atualize o `.env`.
-- **Chamadas à OpenAI muito lentas (minutos):** isso pode acontecer em redes com IPv6 quebrado, porque o Python tenta IPv6 primeiro e só cai para IPv4 depois do timeout. Teste com `curl -6 -m 10 https://api.openai.com`. Se travar, desative o IPv6 da interface de rede (no macOS: `networksetup -setv6off Wi-Fi`).
